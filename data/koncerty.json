@@ -17,6 +17,15 @@
       "cas": "18:00",
       "misto_mapa": "https://maps.app.goo.gl/qKuvqAwCW45rRSBz9",
       "datum": "2026-11-10"
+    },
+    {
+      "nazev": "Jak Čenda Klarinet do Národního divadla přišel",
+      "datum": "2026-11-28",
+      "misto": "Městská knihovna v Praze - Smíchov",
+      "misto_mapa": "https://maps.app.goo.gl/C57AyrcyBzKJ1SybA",
+      "odkaz": "web: pohadka.html?id=cenda",
+      "cas": "16:00",
+      "plakat": "/images/uploads/jak-čenda-klarinet-do-národního-divadla-přišel.png"
     }
   ]
 }
