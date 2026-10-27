@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="titulek-stranky">Hudební pohádka – LENKS | Lenka Seidlová</title>
+<meta id="popis-stranky" name="description" content="Hudební pohádka Lenky Seidlové.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-vnitrek">
+    <a href="index.html" class="logo-odkaz">
+      <img src="images/logo.png" alt="LENKS – Lenka Seidlová">
+    </a>
+    <nav>
+      <ul>
+        <li><a href="index.html">Úvod</a></li>
+        <li><a href="hudebni-pohadky.html" class="aktivni">Hudební pohádky</a></li>
+        <li><a href="vystoupeni.html">Vystoupení</a></li>
+        <li><a href="o-mne.html">O mně</a></li>
+        <li><a href="kontakt.html">Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <p class="drobecek"><a href="hudebni-pohadky.html">Hudební pohádky</a> → <span id="drobecek-nazev"></span></p>
+
+    <div id="obsah-pohadky">
+      <p style="padding:30px 0; color:#777;">Načítám…</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-vnitrek">
+    <div class="footer-kontakt">
+      <a href="tel:+420732972807">+420 732 972 807</a>
+      <a href="mailto:seidlovalenka@email.cz">seidlovalenka@email.cz</a>
+      <a href="https://www.youtube.com/@LenkaSeidlováA1theSigner" class="footer-youtube" target="_blank" rel="noopener">YouTube</a>
+    </div>
+    <span>© 2026 LENKS</span>
+  </div>
+</footer>
+
+<script>
+  // Načte pohádku podle id v adrese (?id=cenda) z data/pohadky.json a vykreslí detail.
+  (function () {
+    function escapovat(text) {
+      var d = document.createElement('div');
+      d.textContent = text == null ? '' : text;
+      return d.innerHTML;
+    }
+
+    var parametry = new URLSearchParams(window.location.search);
+    var id = parametry.get('id');
+    var obsah = document.getElementById('obsah-pohadky');
+
+    if (!id) {
+      obsah.innerHTML = '<p>Tuhle pohádku se nepodařilo najít. <a href="hudebni-pohadky.html">Zpět na přehled pohádek</a>.</p>';
+    } else {
+      fetch('data/pohadky.json')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var pohadka = (data.pohadky || []).find(function (p) { return p.id === id; });
+
+          if (!pohadka) {
+            obsah.innerHTML = '<p>Tuhle pohádku se nepodařilo najít. <a href="hudebni-pohadky.html">Zpět na přehled pohádek</a>.</p>';
+            return;
+          }
+
+          document.title = pohadka.nazev + ' – LENKS';
+          document.getElementById('popis-stranky').setAttribute('content', 'Hudební pohádka Lenky Seidlové: ' + pohadka.nazev + '.');
+          document.getElementById('drobecek-nazev').textContent = pohadka.nazev;
+
+          var ucinkujiciHtml = (pohadka.ucinkujici || []).map(function (u) {
+            return '<li>' + escapovat(u.jmeno) + (u.role ? ': ' + escapovat(u.role) : '') + '</li>';
+          }).join('');
+
+          var delkaHtml = pohadka.delka_vek
+            ? '<p class="pohadka-info-extra">' + escapovat(pohadka.delka_vek) + '</p>'
+            : '';
+
+          var plakatHtml = pohadka.plakat
+            ? '<div class="pohadka-detail-plakat"><img src="' + escapovat(pohadka.plakat) + '" alt="' + escapovat(pohadka.nazev) + '"></div>'
+            : '';
+
+          obsah.innerHTML =
+            '<div class="pohadka-detail">' +
+              plakatHtml +
+              '<div class="pohadka-detail-obsah">' +
+                '<h1>' + escapovat(pohadka.nazev) + '</h1>' +
+                '<p>' + escapovat(pohadka.popis) + '</p>' +
+                (ucinkujiciHtml ? '<div class="pohadka-ucinkujici"><h2>Účinkující</h2><ul>' + ucinkujiciHtml + '</ul></div>' : '') +
+                delkaHtml +
+                '<a href="kontakt.html" class="tlacitko-zajem">Mám zájem o tuto pohádku</a>' +
+              '</div>' +
+            '</div>';
+        })
+        .catch(function () {
+          obsah.innerHTML = '<p>Pohádku se nepodařilo načíst. Zkuste to prosím později.</p>';
+        });
+    }
+  })();
+</script>
+
+</body>
+</html>

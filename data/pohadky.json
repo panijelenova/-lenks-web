@@ -1,0 +1,36 @@
+{
+  "pohadky": [
+    {
+      "id": "cenda",
+      "nazev": "Jak Čenda Klarinet do Národního divadla přišel",
+      "plakat": "images/plakat-cenda.jpg",
+      "popis": "Hudební pohádka, v níž děti poznají kouzelný tón klarinetu prostřednictvím veselého příběhu Čendy, který do hlavního města putuje s muzikou v srdci. Klarinetista přímo na pódiu ukazuje nástroj, zahraje slavné motivy z děl G. F. Händela, W. A. Mozarta a Bedřicha Smetany. Během interaktivního programu si děti zazpívají známé lidovky, hádají, co se v hudbě děje, a pomáhají Čendovi na jeho cestě.",
+      "ucinkujici": [
+        { "jmeno": "Lenka Seidlová", "role": "vyprávění, zpěv" },
+        { "jmeno": "Marek Pavíček", "role": "klarinet a vyprávění" }
+      ],
+      "delka_vek": "Délka představení: 30–45 minut, dle věku a nálady malých posluchačů. Vhodné pro malé i větší posluchače, kteří mají rádi příběhy a hudbu."
+    },
+    {
+      "id": "oskar",
+      "nazev": "Kterak Oskar Horna na Pražský hrad přijel",
+      "plakat": "images/plakat-oskar.jpg",
+      "popis": "Pohádka o Oskarovi, který se vydá až na Pražský hrad, děti seznámí s dechovým nástrojem zvaným lesní roh (horna). Zazní ukázky z děl W. A. Mozarta, Bedřicha Smetany i G. F. Händela a děti si zazpívají známé písničky.",
+      "ucinkujici": [
+        { "jmeno": "Lenka Seidlová", "role": "vyprávění, zpěv" },
+        { "jmeno": "Petr Ježek", "role": "lesní roh a vyprávění" }
+      ],
+      "delka_vek": "Délka představení: 30–45 minut, dle věku a nálady malých posluchačů. Vhodné pro malé i větší posluchače, kteří mají rádi příběhy a hudbu."
+    },
+    {
+      "id": "za-sluncem",
+      "nazev": "Za Sluncem",
+      "plakat": "images/plakat-slunce.jpg",
+      "popis": "Autorská pohádka, v níž zpěv není jen prostředkem vyprávění, ale sám se stává hlavním hrdinou. Lenka pomocí příběhu o cestě „za Sluncem\" ukazuje dětem sílu lidského hlasu, emocí a písně. Zazní úryvky z děl Adama Václava Michny, Bedřicha Smetany i George Gershwina. Představení je jemné a klade důraz na poslech, zapojení a krásu melodie. Skvěle se hodí jako úvod do světa hudby pro nejmenší.",
+      "ucinkujici": [
+        { "jmeno": "Lenka Seidlová", "role": "vyprávění, zpěv" }
+      ],
+      "delka_vek": ""
+    }
+  ]
+}

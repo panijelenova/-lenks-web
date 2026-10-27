@@ -1,0 +1,59 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+locale: "cs"
+
+collections:
+  - name: "koncerty"
+    label: "Koncerty"
+    label_singular: "Seznam koncertů"
+    files:
+      - file: "data/koncerty.json"
+        label: "Nadcházející koncerty"
+        name: "koncerty"
+        fields:
+          - label: "Koncerty"
+            name: "koncerty"
+            widget: "list"
+            label_singular: "Koncert"
+            summary: "{{nazev}} – {{datum}}"
+            fields:
+              - { label: "Datum", name: "datum", widget: "date", format: "YYYY-MM-DD", hint: "Povinné." }
+              - { label: "Čas", name: "cas", widget: "string", required: false, hint: "Např. 16:00" }
+              - { label: "Místo (adresa)", name: "misto", widget: "string", hint: "Povinné." }
+              - { label: "Odkaz na mapu (Google Maps)", name: "misto_mapa", widget: "string", required: false, hint: "Nepovinné – adresa pak bude klikací a povede na mapu." }
+              - { label: "Název akce", name: "nazev", widget: "string", required: false }
+              - { label: "Odkaz na událost / web", name: "odkaz", widget: "string", required: false, hint: "Nepovinné – např. odkaz na FB událost nebo na stránku pohádky." }
+              - { label: "Plakát", name: "plakat", widget: "image", required: false }
+
+  - name: "pohadky"
+    label: "Hudební pohádky"
+    label_singular: "Seznam pohádek"
+    files:
+      - file: "data/pohadky.json"
+        label: "Repertoár pohádek"
+        name: "pohadky"
+        fields:
+          - label: "Pohádky"
+            name: "pohadky"
+            widget: "list"
+            label_singular: "Pohádka"
+            summary: "{{nazev}}"
+            fields:
+              - { label: "ID (krátký kód bez mezer a diakritiky)", name: "id", widget: "string", hint: "Použije se v adrese stránky, např. za-sluncem. U nové pohádky musí být jedinečné." }
+              - { label: "Název", name: "nazev", widget: "string" }
+              - { label: "Plakát", name: "plakat", widget: "image", required: false }
+              - { label: "Popis", name: "popis", widget: "text" }
+              - label: "Účinkující"
+                name: "ucinkujici"
+                widget: "list"
+                label_singular: "Účinkující"
+                summary: "{{jmeno}}"
+                fields:
+                  - { label: "Jméno", name: "jmeno", widget: "string" }
+                  - { label: "Role", name: "role", widget: "string", hint: "Např. vyprávění, zpěv" }
+              - { label: "Délka a věk (nepovinné)", name: "delka_vek", widget: "string", required: false }

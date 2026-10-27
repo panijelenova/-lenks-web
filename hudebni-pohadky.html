@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hudební pohádky – LENKS | Lenka Seidlová</title>
-<meta name="description" content="Autorské hudební pohádky Lenky Seidlové pro děti i dospělé – zpěv, vyprávění a živý kontakt s publikem.">
+<meta name="description" content="Autorské hudební pohádky Lenky Seidlové pro děti – krátké příběhy, ve kterých děti poznávají hudební nástroje a klasickou hudbu.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap" rel="stylesheet">
@@ -38,16 +38,8 @@
       <p>Programy přizpůsobuji věku i prostředí, aby hudba mohla potěšit, uklidnit nebo jen zpříjemnit den.</p>
       <p>Ráda za vámi přijedu s hotovým programem – stačí si vybrat.</p>
 
-      <div class="pohadky-mrizka">
-        <a href="pohadky/cenda.html" class="pohadka-karta">
-          <img src="images/plakat-cenda.jpg" alt="Jak Čenda Klarinet do Národního divadla přišel">
-        </a>
-        <a href="pohadky/oskar.html" class="pohadka-karta">
-          <img src="images/plakat-oskar.jpg" alt="Kterak Oskar Horna na Pražský hrad přijel">
-        </a>
-        <a href="pohadky/za-sluncem.html" class="pohadka-karta">
-          <img src="images/plakat-slunce.jpg" alt="Za Sluncem">
-        </a>
+      <div class="pohadky-mrizka" id="pohadky-mrizka">
+        <p style="color:#777;">Načítám pohádky…</p>
       </div>
     </div>
   </section>
@@ -64,6 +56,32 @@
     <span>© 2026 LENKS</span>
   </div>
 </footer>
+
+<script>
+  // Vykreslí náhledy všech pohádek z data/pohadky.json.
+  (function () {
+    var mrizka = document.getElementById('pohadky-mrizka');
+
+    fetch('data/pohadky.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var pohadky = data.pohadky || [];
+
+        if (!pohadky.length) {
+          mrizka.innerHTML = '<p style="color:#777;">Zatím tu nejsou žádné pohádky.</p>';
+          return;
+        }
+
+        mrizka.innerHTML = pohadky.map(function (p) {
+          var obrazek = p.plakat ? '<img src="' + p.plakat + '" alt="' + p.nazev + '">' : '';
+          return '<a href="pohadka.html?id=' + encodeURIComponent(p.id) + '" class="pohadka-karta">' + obrazek + '</a>';
+        }).join('');
+      })
+      .catch(function () {
+        mrizka.innerHTML = '<p style="color:#777;">Pohádky se nepodařilo načíst.</p>';
+      });
+  })();
+</script>
 
 </body>
 </html>

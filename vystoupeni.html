@@ -39,25 +39,7 @@
       <h2 style="font-size:20px; color:var(--barva-stredni); margin:30px 0 4px;">Nadcházející koncerty</h2>
 
       <div class="koncerty-seznam" id="koncerty-seznam">
-
-        <!-- Koncerty jsou seřazené od nejbližšího data. Datum v data-datum
-             (formát RRRR-MM-DD) slouží jen k automatickému skrytí, jakmile akce proběhne. -->
-
-        <div class="koncert-karta" data-datum="2026-10-26">
-          <a href="pohadky/cenda.html" class="koncert-plakat">
-            <img src="images/plakat-cenda-akce.jpg" alt="Jak Čenda Klarinet do Národního divadla přišel">
-          </a>
-          <div class="koncert-info">
-            <div class="koncert-nazev"><a href="pohadky/cenda.html">Jak Čenda Klarinet do Národního divadla přišel</a></div>
-            <div class="koncert-udaj">26. 10. 2026 · 16:00</div>
-            <div class="koncert-udaj">
-              <a href="https://maps.app.goo.gl/isx2MwJX8QjgcdF38" target="_blank" rel="noopener">
-                Městská knihovna v Praze – Lužiny, Archeologická 2256/1, Praha 13
-              </a>
-            </div>
-          </div>
-        </div>
-
+        <p style="color:#777;">Načítám koncerty…</p>
       </div>
 
       <p class="zadne-koncerty" id="zadne-koncerty" style="display:none;">Momentálně nemám naplánované žádné veřejné vystoupení. Ozvěte se mi, ráda vám připravím program na míru.</p>
@@ -78,26 +60,80 @@
 </footer>
 
 <script>
-  // Skryje koncerty, jejichž datum už je v minulosti,
-  // a pokud nezbude žádný, zobrazí zprávu místo seznamu.
+  // Načte koncerty z data/koncerty.json, seřadí od nejbližšího data,
+  // skryje proběhlé a vykreslí zbytek jako karty. Nepovinné položky
+  // (název, odkaz, plakát) se zobrazí jen, pokud jsou vyplněné.
   (function () {
-    var dnes = new Date();
-    dnes.setHours(0, 0, 0, 0);
-    var karty = document.querySelectorAll('.koncert-karta');
-    var zbyvaNejaky = false;
-
-    karty.forEach(function (karta) {
-      var datum = new Date(karta.getAttribute('data-datum'));
-      if (datum < dnes) {
-        karta.style.display = 'none';
-      } else {
-        zbyvaNejaky = true;
-      }
-    });
-
-    if (!zbyvaNejaky) {
-      document.getElementById('zadne-koncerty').style.display = 'block';
+    function escapovat(text) {
+      var d = document.createElement('div');
+      d.textContent = text == null ? '' : text;
+      return d.innerHTML;
     }
+
+    function formatovatDatum(iso) {
+      var casti = iso.split('-');
+      return casti[2] + '. ' + casti[1] + '. ' + casti[0];
+    }
+
+    var seznam = document.getElementById('koncerty-seznam');
+    var zadneZprava = document.getElementById('zadne-koncerty');
+
+    fetch('data/koncerty.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var dnes = new Date();
+        dnes.setHours(0, 0, 0, 0);
+
+        var budouci = (data.koncerty || [])
+          .filter(function (k) { return new Date(k.datum) >= dnes; })
+          .sort(function (a, b) { return new Date(a.datum) - new Date(b.datum); });
+
+        if (!budouci.length) {
+          seznam.innerHTML = '';
+          zadneZprava.style.display = 'block';
+          return;
+        }
+
+        seznam.innerHTML = budouci.map(function (k) {
+          var datumCas = formatovatDatum(k.datum) + (k.cas ? ' · ' + escapovat(k.cas) : '');
+
+          var mistoHtml = k.misto_mapa
+            ? '<a href="' + escapovat(k.misto_mapa) + '" target="_blank" rel="noopener">' + escapovat(k.misto) + '</a>'
+            : escapovat(k.misto);
+
+          var plakatHtml = '';
+          if (k.plakat) {
+            var obrazek = '<img src="' + escapovat(k.plakat) + '" alt="' + escapovat(k.nazev || 'Plakát akce') + '">';
+            plakatHtml = k.odkaz
+              ? '<a href="' + escapovat(k.odkaz) + '" class="koncert-plakat">' + obrazek + '</a>'
+              : '<div class="koncert-plakat">' + obrazek + '</div>';
+          }
+
+          var nazevHtml = '';
+          if (k.nazev) {
+            nazevHtml = '<div class="koncert-nazev">' + (k.odkaz
+              ? '<a href="' + escapovat(k.odkaz) + '">' + escapovat(k.nazev) + '</a>'
+              : escapovat(k.nazev)) + '</div>';
+          }
+
+          var viceHtml = k.odkaz
+            ? '<div class="koncert-udaj"><a href="' + escapovat(k.odkaz) + '">Více o akci →</a></div>'
+            : '';
+
+          return '<div class="koncert-karta">' +
+            plakatHtml +
+            '<div class="koncert-info">' +
+              nazevHtml +
+              '<div class="koncert-udaj">' + datumCas + '</div>' +
+              '<div class="koncert-udaj">' + mistoHtml + '</div>' +
+              viceHtml +
+            '</div>' +
+          '</div>';
+        }).join('');
+      })
+      .catch(function () {
+        seznam.innerHTML = '<p style="color:#777;">Koncerty se nepodařilo načíst.</p>';
+      });
   })();
 </script>
 

@@ -58,16 +58,8 @@
       <h2>Hudební pohádky</h2>
       <p>V mých autorských hudebních pohádkách se propojuje zpěv, vyprávění a živý kontakt s publikem. Každý příběh vzniká s láskou k hudbě. Pohádky jsou určeny pro malé i velké – hodí se do jesliček, mateřských škol, na základní školy, ale také mezi rodiny s nejmenšími dětmi nebo do zdravotnických zařízení či domovů seniorů.</p>
 
-      <div class="pohadky-mrizka">
-        <a href="pohadky/cenda.html" class="pohadka-karta">
-          <img src="images/plakat-cenda.jpg" alt="Jak Čenda Klarinet do Národního divadla přišel">
-        </a>
-        <a href="pohadky/oskar.html" class="pohadka-karta">
-          <img src="images/plakat-oskar.jpg" alt="Kterak Oskar Horna na Pražský hrad přijel">
-        </a>
-        <a href="pohadky/za-sluncem.html" class="pohadka-karta">
-          <img src="images/plakat-slunce.jpg" alt="Za Sluncem">
-        </a>
+      <div class="pohadky-mrizka" id="pohadky-mrizka">
+        <p style="color:#777;">Načítám pohádky…</p>
       </div>
 
       <a href="hudebni-pohadky.html" class="odkaz-vice">Všechny pohádky →</a>
@@ -104,6 +96,32 @@
     <span>© 2026 LENKS</span>
   </div>
 </footer>
+
+<script>
+  // Vykreslí náhledy všech pohádek z data/pohadky.json.
+  (function () {
+    var mrizka = document.getElementById('pohadky-mrizka');
+
+    fetch('data/pohadky.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var pohadky = data.pohadky || [];
+
+        if (!pohadky.length) {
+          mrizka.innerHTML = '';
+          return;
+        }
+
+        mrizka.innerHTML = pohadky.map(function (p) {
+          var obrazek = p.plakat ? '<img src="' + p.plakat + '" alt="' + p.nazev + '">' : '';
+          return '<a href="pohadka.html?id=' + encodeURIComponent(p.id) + '" class="pohadka-karta">' + obrazek + '</a>';
+        }).join('');
+      })
+      .catch(function () {
+        mrizka.innerHTML = '';
+      });
+  })();
+</script>
 
 </body>
 </html>

@@ -144,6 +144,7 @@ nav a.aktivni {
 @media (min-width: 700px) {
   .hero-vnitrek {
     flex-direction: row;
+    align-items: flex-start;
   }
 }
 

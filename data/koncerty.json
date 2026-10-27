@@ -1,0 +1,13 @@
+{
+  "koncerty": [
+    {
+      "datum": "2026-10-26",
+      "cas": "16:00",
+      "misto": "Městská knihovna v Praze – Lužiny, Archeologická 2256/1, Praha 13",
+      "misto_mapa": "https://maps.app.goo.gl/isx2MwJX8QjgcdF38",
+      "nazev": "Jak Čenda Klarinet do Národního divadla přišel",
+      "odkaz": "pohadka.html?id=cenda",
+      "plakat": "images/plakat-cenda-akce.jpg"
+    }
+  ]
+}
