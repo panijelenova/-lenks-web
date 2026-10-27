@@ -43,6 +43,11 @@
       </div>
 
       <p class="zadne-koncerty" id="zadne-koncerty" style="display:none;">Momentálně nemám naplánované žádné veřejné vystoupení. Ozvěte se mi, ráda vám připravím program na míru.</p>
+
+      <div id="probehle-sekce" style="display:none;">
+        <h2 style="font-size:20px; color:var(--barva-stredni); margin:40px 0 4px;">Proběhlé akce</h2>
+        <div class="koncerty-seznam koncerty-seznam--probehle" id="probehle-seznam"></div>
+      </div>
     </div>
   </section>
 
@@ -75,8 +80,47 @@
       return casti[2] + '. ' + casti[1] + '. ' + casti[0];
     }
 
+    function vykreslitKartu(k) {
+      var datumCas = formatovatDatum(k.datum) + (k.cas ? ' · ' + escapovat(k.cas) : '');
+
+      var mistoHtml = k.misto_mapa
+        ? '<a href="' + escapovat(k.misto_mapa) + '" target="_blank" rel="noopener">' + escapovat(k.misto) + '</a>'
+        : escapovat(k.misto);
+
+      var plakatHtml = '';
+      if (k.plakat) {
+        var obrazek = '<img src="' + escapovat(k.plakat) + '" alt="' + escapovat(k.nazev || 'Plakát akce') + '">';
+        plakatHtml = k.odkaz
+          ? '<a href="' + escapovat(k.odkaz) + '" class="koncert-plakat">' + obrazek + '</a>'
+          : '<div class="koncert-plakat">' + obrazek + '</div>';
+      }
+
+      var nazevHtml = '';
+      if (k.nazev) {
+        nazevHtml = '<div class="koncert-nazev">' + (k.odkaz
+          ? '<a href="' + escapovat(k.odkaz) + '">' + escapovat(k.nazev) + '</a>'
+          : escapovat(k.nazev)) + '</div>';
+      }
+
+      var viceHtml = k.odkaz
+        ? '<div class="koncert-udaj"><a href="' + escapovat(k.odkaz) + '">Více o akci →</a></div>'
+        : '';
+
+      return '<div class="koncert-karta">' +
+        plakatHtml +
+        '<div class="koncert-info">' +
+          nazevHtml +
+          '<div class="koncert-udaj">' + datumCas + '</div>' +
+          '<div class="koncert-udaj">' + mistoHtml + '</div>' +
+          viceHtml +
+        '</div>' +
+      '</div>';
+    }
+
     var seznam = document.getElementById('koncerty-seznam');
     var zadneZprava = document.getElementById('zadne-koncerty');
+    var probehleSekce = document.getElementById('probehle-sekce');
+    var probehleSeznam = document.getElementById('probehle-seznam');
 
     fetch('data/koncerty.json')
       .then(function (r) { return r.json(); })
@@ -84,52 +128,27 @@
         var dnes = new Date();
         dnes.setHours(0, 0, 0, 0);
 
-        var budouci = (data.koncerty || [])
+        var vsechny = data.koncerty || [];
+
+        var budouci = vsechny
           .filter(function (k) { return new Date(k.datum) >= dnes; })
           .sort(function (a, b) { return new Date(a.datum) - new Date(b.datum); });
+
+        var probehle = vsechny
+          .filter(function (k) { return new Date(k.datum) < dnes; })
+          .sort(function (a, b) { return new Date(b.datum) - new Date(a.datum); });
 
         if (!budouci.length) {
           seznam.innerHTML = '';
           zadneZprava.style.display = 'block';
-          return;
+        } else {
+          seznam.innerHTML = budouci.map(vykreslitKartu).join('');
         }
 
-        seznam.innerHTML = budouci.map(function (k) {
-          var datumCas = formatovatDatum(k.datum) + (k.cas ? ' · ' + escapovat(k.cas) : '');
-
-          var mistoHtml = k.misto_mapa
-            ? '<a href="' + escapovat(k.misto_mapa) + '" target="_blank" rel="noopener">' + escapovat(k.misto) + '</a>'
-            : escapovat(k.misto);
-
-          var plakatHtml = '';
-          if (k.plakat) {
-            var obrazek = '<img src="' + escapovat(k.plakat) + '" alt="' + escapovat(k.nazev || 'Plakát akce') + '">';
-            plakatHtml = k.odkaz
-              ? '<a href="' + escapovat(k.odkaz) + '" class="koncert-plakat">' + obrazek + '</a>'
-              : '<div class="koncert-plakat">' + obrazek + '</div>';
-          }
-
-          var nazevHtml = '';
-          if (k.nazev) {
-            nazevHtml = '<div class="koncert-nazev">' + (k.odkaz
-              ? '<a href="' + escapovat(k.odkaz) + '">' + escapovat(k.nazev) + '</a>'
-              : escapovat(k.nazev)) + '</div>';
-          }
-
-          var viceHtml = k.odkaz
-            ? '<div class="koncert-udaj"><a href="' + escapovat(k.odkaz) + '">Více o akci →</a></div>'
-            : '';
-
-          return '<div class="koncert-karta">' +
-            plakatHtml +
-            '<div class="koncert-info">' +
-              nazevHtml +
-              '<div class="koncert-udaj">' + datumCas + '</div>' +
-              '<div class="koncert-udaj">' + mistoHtml + '</div>' +
-              viceHtml +
-            '</div>' +
-          '</div>';
-        }).join('');
+        if (probehle.length) {
+          probehleSeznam.innerHTML = probehle.map(vykreslitKartu).join('');
+          probehleSekce.style.display = 'block';
+        }
       })
       .catch(function () {
         seznam.innerHTML = '<p style="color:#777;">Koncerty se nepodařilo načíst.</p>';

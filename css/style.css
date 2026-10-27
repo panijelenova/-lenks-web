@@ -440,6 +440,14 @@ footer {
   margin-top: 16px;
 }
 
+.koncerty-seznam--probehle {
+  opacity: 0.6;
+}
+
+.koncerty-seznam--probehle .koncert-karta {
+  border-style: dashed;
+}
+
 /* ===== O mně ===== */
 
 .o-mne-uvod {
