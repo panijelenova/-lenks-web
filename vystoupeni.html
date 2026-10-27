@@ -51,6 +51,10 @@
     </div>
   </section>
 
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-obrazek" src="" alt="">
+  </div>
+
 </main>
 
 <footer>
@@ -90,9 +94,7 @@
       var plakatHtml = '';
       if (k.plakat) {
         var obrazek = '<img src="' + escapovat(k.plakat) + '" alt="' + escapovat(k.nazev || 'Plakát akce') + '">';
-        plakatHtml = k.odkaz
-          ? '<a href="' + escapovat(k.odkaz) + '" class="koncert-plakat">' + obrazek + '</a>'
-          : '<div class="koncert-plakat">' + obrazek + '</div>';
+        plakatHtml = '<button type="button" class="koncert-plakat" data-plakat="' + escapovat(k.plakat) + '" data-alt="' + escapovat(k.nazev || 'Plakát akce') + '" aria-label="Zobrazit plakát ve velkém">' + obrazek + '</button>';
       }
 
       var nazevHtml = '';
@@ -153,6 +155,25 @@
       .catch(function () {
         seznam.innerHTML = '<p style="color:#777;">Koncerty se nepodařilo načíst.</p>';
       });
+
+    // Kliknutí na plakát ho zobrazí přes celou obrazovku; název a "Více o akci"
+    // zůstávají odkazem ven (řeší se přímo v HTML výše).
+    var lightbox = document.getElementById('lightbox');
+    var lightboxObrazek = document.getElementById('lightbox-obrazek');
+
+    document.addEventListener('click', function (e) {
+      var tlacitko = e.target.closest('.koncert-plakat[data-plakat]');
+      if (tlacitko) {
+        lightboxObrazek.src = tlacitko.getAttribute('data-plakat');
+        lightboxObrazek.alt = tlacitko.getAttribute('data-alt') || '';
+        lightbox.classList.add('otevreny');
+      }
+    });
+
+    lightbox.addEventListener('click', function () {
+      lightbox.classList.remove('otevreny');
+      lightboxObrazek.src = '';
+    });
   })();
 </script>
 
