@@ -8,6 +8,15 @@
       "nazev": "Jak Čenda Klarinet do Národního divadla přišel",
       "odkaz": "pohadka.html?id=cenda",
       "plakat": "images/plakat-cenda-akce.jpg"
+    },
+    {
+      "plakat": "/images/uploads/od-madrigalu.jpg",
+      "odkaz": "https://www.smsticket.cz/vstupenky/74025-od-madrigalu-po-chanson-kostel-nanebevzeti-panny-marie-brandys-nad-labem-stara-boleslav",
+      "misto": "Bazilika Nanebevzetí Panny Marie - Stará Boleslav",
+      "nazev": "Od madrigalů po Chanson",
+      "cas": "18:00",
+      "misto_mapa": "https://maps.app.goo.gl/qKuvqAwCW45rRSBz9",
+      "datum": "2026-11-10"
     }
   ]
 }
