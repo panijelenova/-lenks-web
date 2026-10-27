@@ -22,7 +22,7 @@ collections:
             label_singular: "Koncert"
             summary: "{{nazev}} – {{datum}}"
             fields:
-              - { label: "Datum", name: "datum", widget: "date", format: "YYYY-MM-DD", hint: "Povinné." }
+              - { label: "Datum", name: "datum", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, hint: "Povinné." }
               - { label: "Čas", name: "cas", widget: "string", required: false, hint: "Např. 16:00" }
               - { label: "Místo (adresa)", name: "misto", widget: "string", hint: "Povinné." }
               - { label: "Odkaz na mapu (Google Maps)", name: "misto_mapa", widget: "string", required: false, hint: "Nepovinné – adresa pak bude klikací a povede na mapu." }
